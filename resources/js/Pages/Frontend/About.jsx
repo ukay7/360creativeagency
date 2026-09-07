@@ -270,11 +270,11 @@ export default function About({ teamMembers = [] }) {
                     e.currentTarget.style.background = "rgba(255,255,255,0.03)";
                   }}
                 >
-                  <div style={{ height: "280px", overflow: "hidden", position: "relative" }}>
+                  <div style={{ height: "320px", overflow: "hidden", position: "relative" }}>
                     <img
                       src={member.photo_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80&fit=crop"}
                       alt={member.name}
-                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center", display: "block" }}
                     />
                     <div
                       style={{
