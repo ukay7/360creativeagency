@@ -3,6 +3,37 @@ import MainLayout from "@/layouts/MainLayout";
 import PageMeta from "@/seo/PageMeta";
 import RevealText from "@/shared/effects/RevealText";
 
+const DEFAULT_TEAM = [
+  {
+    id: 1,
+    name: "Alex Morgan",
+    designation: "Creative Director & Founder",
+    photo_url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80&fit=crop",
+    description: "10+ years leading visual identity systems, brand strategy, and high-converting creative direction for brands across Canada.",
+  },
+  {
+    id: 2,
+    name: "David Vance",
+    designation: "Head of Web & App Development",
+    photo_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop",
+    description: "Lead full-stack developer specializing in scalable React web apps, Laravel backends, SaaS architecture, and mobile platforms.",
+  },
+  {
+    id: 3,
+    name: "Elena Rostova",
+    designation: "Senior Video Editor & Motion Artist",
+    photo_url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80&fit=crop",
+    description: "Post-production specialist crafting cinematic commercial edits, color grading, 2D/3D motion graphics, and viral social reels.",
+  },
+  {
+    id: 4,
+    name: "Marcus Sterling",
+    designation: "Head of Digital Marketing & Social Media",
+    photo_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80&fit=crop",
+    description: "Performance marketing strategist managing multi-channel ad campaigns, social media account growth, and conversion funnels.",
+  },
+];
+
 const SERVICES_OFFERED = [
   {
     icon: "🎨",
@@ -87,12 +118,14 @@ const TOOLS = [
   { name: "MySQL & MongoDB", cat: "Database" },
 ];
 
-export default function About() {
+export default function About({ teamMembers = [] }) {
+  const displayTeam = teamMembers && teamMembers.length > 0 ? teamMembers : DEFAULT_TEAM;
+
   return (
     <MainLayout headerStyle={2} footerStyle={2}>
       <PageMeta
-        title="About Us - 360 Creative Agency"
-        description="360 Creative Agency is a full-service digital agency specializing in UI/UX design, branding, web development, video editing, social media management, and digital marketing."
+        title="About Us - Creative Agency"
+        description="Creative Agency is a full-service digital agency specializing in UI/UX design, branding, web development, video editing, social media management, and digital marketing."
       />
 
       {/* ─── HERO ─────────────────────────────────── */}
@@ -113,7 +146,7 @@ export default function About() {
                 <RevealText>We Create. We Code. We Grow Your Brand.</RevealText>
               </h1>
               <p className="fz-18 mb-5" style={{ color: "rgba(255,255,255,0.65)", maxWidth: "560px", lineHeight: 1.75 }}>
-                360 Creative Agency is a Markham-based full-service digital studio. We partner with businesses across Canada to deliver world-class branding, development, video content, and digital marketing — all under one roof.
+                Creative Agency is a Markham-based full-service digital studio. We partner with businesses across Canada to deliver world-class branding, development, video content, and digital marketing — all under one roof.
               </p>
               <div className="d-flex flex-wrap gap-3">
                 <a
@@ -137,7 +170,7 @@ export default function About() {
               <div style={{ borderRadius: "24px", overflow: "hidden", position: "relative" }}>
                 <img
                   src="/assets/imgs/about/about-hero-team.jpg"
-                  alt="360 Creative Agency team at work"
+                  alt="Creative Agency team at work"
                   className="img-fluid w-100"
                   style={{ objectFit: "cover", maxHeight: "440px", display: "block" }}
                 />
@@ -184,6 +217,90 @@ export default function About() {
                   <span className="text-white" style={{ opacity: 0.6, fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                     {stat.label}
                   </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── TEAM SECTION (4 BOXES) ───────────────────────── */}
+      <section className="pb-100" style={{ background: "var(--bg-1, #0a0a0a)" }}>
+        <div className="container">
+          <div className="row mb-60 align-items-end">
+            <div className="col-lg-6">
+              <span
+                className="text-uppercase fw-600 mb-3 d-block"
+                style={{ color: "#f97316", letterSpacing: "0.1em", fontSize: "13px" }}
+              >
+                ◈ Our Core Team
+              </span>
+              <h2
+                className="text-white mb-0"
+                style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1 }}
+              >
+                Meet the Experts Behind Your Growth
+              </h2>
+            </div>
+            <div className="col-lg-6 mt-3 mt-lg-0">
+              <p className="mb-0" style={{ color: "rgba(255,255,255,0.55)", fontSize: "16px", lineHeight: 1.8 }}>
+                A dedicated team of 4 specialists combining creative vision, engineering precision, video storytelling, and performance marketing to turn your ideas into market leaders.
+              </p>
+            </div>
+          </div>
+
+          <div className="row g-4">
+            {displayTeam.map((member) => (
+              <div key={member.id} className="col-lg-3 col-md-6">
+                <div
+                  className="rounded-4 overflow-hidden h-100 d-flex flex-column"
+                  style={{
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    transition: "transform .3s ease, border-color .3s ease, background .3s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-6px)";
+                    e.currentTarget.style.borderColor = "rgba(249,115,22,0.4)";
+                    e.currentTarget.style.background = "rgba(249,115,22,0.06)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+                    e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+                  }}
+                >
+                  <div style={{ height: "280px", overflow: "hidden", position: "relative" }}>
+                    <img
+                      src={member.photo_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80&fit=crop"}
+                      alt={member.name}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: "80px",
+                        background: "linear-gradient(to top, rgba(10,10,10,0.95), transparent)",
+                      }}
+                    />
+                  </div>
+                  <div className="p-4 d-flex flex-column flex-grow-1">
+                    <h4 className="text-white fw-700 mb-1" style={{ fontSize: "1.2rem" }}>
+                      {member.name}
+                    </h4>
+                    <span
+                      className="d-block mb-3 fw-600"
+                      style={{ color: "#f97316", fontSize: "13px", letterSpacing: "0.02em" }}
+                    >
+                      {member.designation}
+                    </span>
+                    <p className="mb-0 mt-auto" style={{ color: "rgba(255,255,255,0.55)", fontSize: "13.5px", lineHeight: 1.65 }}>
+                      {member.description}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}

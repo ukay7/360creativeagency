@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Head, useForm, Link } from '@inertiajs/react';
 
 export default function Login() {
   const { data, setData, post, processing, errors } = useForm({
-    email: 'admin@360creative.com',
-    password: 'password123',
+    email: '',
+    password: '',
   });
 
   const handleSubmit = (e) => {
@@ -23,7 +23,7 @@ export default function Login() {
       padding: '1.5rem',
       color: '#f8fafc'
     }}>
-      <Head title="Admin Login - SmartAdmin Console" />
+      <Head title="Admin Login - Creative Agency Console" />
 
       <div style={{
         width: '100%',
@@ -42,21 +42,21 @@ export default function Login() {
             justifyContent: 'center',
             width: '64px',
             height: '64px',
-            background: 'rgba(56, 189, 248, 0.1)',
+            background: 'rgba(249, 115, 22, 0.1)',
             borderRadius: '16px',
-            color: '#38bdf8',
+            color: '#f97316',
             marginBottom: '1rem',
             fontSize: '1.75rem',
             fontWeight: 'bold',
-            border: '1px solid rgba(56, 189, 248, 0.2)'
+            border: '1px solid rgba(249, 115, 22, 0.2)'
           }}>
             ⚙️
           </div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: '0 0 0.5rem 0', color: '#f8fafc' }}>
-            SmartAdmin Console
+            Creative Agency Console
           </h1>
           <p style={{ fontSize: '0.875rem', color: '#94a3b8', margin: 0 }}>
-            Sign in to manage 360 Creative Agency
+            Sign in to manage your website
           </p>
         </div>
 
@@ -70,7 +70,7 @@ export default function Login() {
               type="email"
               value={data.email}
               onChange={(e) => setData('email', e.target.value)}
-              placeholder="admin@360creative.com"
+              placeholder="Enter your email address"
               required
               style={{
                 width: '100%',
@@ -99,7 +99,7 @@ export default function Login() {
               type="password"
               value={data.password}
               onChange={(e) => setData('password', e.target.value)}
-              placeholder="••••••••"
+              placeholder="Enter your password"
               required
               style={{
                 width: '100%',
@@ -126,7 +126,7 @@ export default function Login() {
             style={{
               width: '100%',
               padding: '0.85rem',
-              background: '#0284c7',
+              background: '#f97316',
               color: 'white',
               border: 'none',
               borderRadius: '8px',
@@ -135,7 +135,7 @@ export default function Login() {
               cursor: processing ? 'not-allowed' : 'pointer',
               opacity: processing ? 0.7 : 1,
               transition: 'background 0.2s',
-              boxShadow: '0 4px 12px rgba(2, 132, 199, 0.3)'
+              boxShadow: '0 4px 12px rgba(249, 115, 22, 0.3)'
             }}
           >
             {processing ? 'Signing In...' : 'Sign In to Backoffice'}
@@ -143,12 +143,9 @@ export default function Login() {
         </form>
 
         <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.85rem', color: '#64748b' }}>
-          Default Demo Login: <strong style={{ color: '#38bdf8' }}>admin@360creative.com</strong> / <strong style={{ color: '#38bdf8' }}>password123</strong>
-          <div style={{ marginTop: '1rem' }}>
-            <Link href="/" style={{ color: '#94a3b8', textDecoration: 'none' }}>
-              ← Return to Public Website
-            </Link>
-          </div>
+          <Link href="/" style={{ color: '#94a3b8', textDecoration: 'none' }}>
+            ← Return to Public Website
+          </Link>
         </div>
       </div>
     </div>

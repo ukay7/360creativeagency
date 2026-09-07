@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\TeamMember;
 
 class AgencySeeder extends Seeder
 {
@@ -16,6 +17,7 @@ class AgencySeeder extends Seeder
         DB::table('portfolio_items')->truncate();
         DB::table('inquiries')->truncate();
         DB::table('settings')->truncate();
+        DB::table('team_members')->truncate();
 
         User::create([
             'name' => 'Agency Administrator',
@@ -30,6 +32,45 @@ class AgencySeeder extends Seeder
             ['key' => 'contact_email', 'value' => 'info@360creativeagency.ca', 'created_at' => now(), 'updated_at' => now()],
             ['key' => 'contact_phone', 'value' => '+1 416 836 7311', 'created_at' => now(), 'updated_at' => now()],
             ['key' => 'address', 'value' => '85 Dickson Hill Rd, Markham, ON L3P 3J3', 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
+        DB::table('team_members')->insert([
+            [
+                'name' => 'Alex Morgan',
+                'designation' => 'Creative Director & Founder',
+                'photo_url' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80&fit=crop',
+                'description' => '10+ years leading visual identity systems, brand strategy, and high-converting creative direction for brands across Canada.',
+                'order' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'David Vance',
+                'designation' => 'Head of Web & App Development',
+                'photo_url' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop',
+                'description' => 'Lead full-stack developer specializing in scalable React web apps, Laravel backends, SaaS architecture, and mobile platforms.',
+                'order' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Elena Rostova',
+                'designation' => 'Senior Video Editor & Motion Artist',
+                'photo_url' => 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80&fit=crop',
+                'description' => 'Post-production specialist crafting cinematic commercial edits, color grading, 2D/3D motion graphics, and viral social reels.',
+                'order' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Marcus Sterling',
+                'designation' => 'Head of Digital Marketing & Social Media',
+                'photo_url' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80&fit=crop',
+                'description' => 'Performance marketing strategist managing multi-channel ad campaigns, social media account growth, and conversion funnels.',
+                'order' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
         DB::table('services')->insert([

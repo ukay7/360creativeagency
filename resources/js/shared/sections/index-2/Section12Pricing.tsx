@@ -1,5 +1,6 @@
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Link } from "@inertiajs/react";
+import { PACKAGES } from "@/shared/data/packagesData";
 
 const ARROW_SVG = (
     <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,118 +20,22 @@ const FEATURE_ICON_SVG = (
     </svg>
 );
 
-// Starter plan prices (small / startup clients)
-const STARTER_PRICES = { essential: "$799", growth: "$1,499", complete: "$2,499" };
-// Business plan prices (established brands)
-const BUSINESS_PRICES = { essential: "$1,499", growth: "$2,800", complete: "$4,500" };
-
-const PLANS = [
-    {
-        key: "essential" as const,
-        title: "Essential",
-        priceClass: "text-price-starter",
-        desc: "Perfect for startups and small businesses ready to establish a strong digital presence.",
-        btnText: "Get Started",
-        features: [
-            "Brand logo & basic identity",
-            "5-page responsive website",
-            "Social media setup (2 platforms)",
-            "10 social media posts/month",
-            "Basic SEO setup",
-            "1 promo video edit (60 sec)",
-        ],
-        popular: false,
-    },
-    {
-        key: "growth" as const,
-        title: "Growth",
-        priceClass: "text-price-growth",
-        desc: "For growing brands that need full creative execution across design, content & marketing.",
-        btnText: "Choose Growth",
-        features: [
-            "Full brand identity system",
-            "Custom web or app development",
-            "Social media management (3 platforms)",
-            "20 posts + 4 reels/month",
-            "SEO & Google Ads setup",
-            "4 video edits/month",
-            "Monthly analytics report",
-        ],
-        popular: true,
-    },
-    {
-        key: "complete" as const,
-        title: "Complete",
-        priceClass: "text-price-scale",
-        desc: "An all-inclusive digital partnership — full-service creative, development & marketing.",
-        btnText: "Go Complete",
-        features: [
-            "Complete brand identity & guidelines",
-            "Full web + mobile app development",
-            "All-platform social media management",
-            "30 posts + 8 reels/month",
-            "Performance marketing (Meta + Google)",
-            "8 premium video edits/month",
-            "Dedicated account manager",
-            "Weekly reports & strategy calls",
-        ],
-        popular: false,
-    },
-];
-
 type Section12PricingProps = {
     titleSlot?: ReactNode;
     footerSlot?: ReactNode;
 };
 
 export default function Section12Pricing({ titleSlot, footerSlot }: Section12PricingProps) {
-    const [isBusiness, setIsBusiness] = useState(false);
-    const prices = isBusiness ? BUSINESS_PRICES : STARTER_PRICES;
-
     return (
         <>
-            <div className="row align-items-end mb-60 g-4">
-                <div className="col-lg-9">{titleSlot}</div>
-                <div className="col-lg-3 ms-lg-auto">
-                    <div className="change-price-plan jus mt-6 wow img-custom-anim-top">
-                        <span
-                            className="price-plan-toggle-label"
-                            data-plan="personal"
-                            onClick={() => setIsBusiness(false)}
-                            onKeyDown={(e) => e.key === "Enter" && setIsBusiness(false)}
-                            role="button"
-                            tabIndex={0}
-                        >
-                            Startup
-                        </span>
-                        <label className="price-plan-toggle">
-                            <input
-                                type="checkbox"
-                                className="price-plan-toggle__input"
-                                id="price-plan-toggle"
-                                aria-label="Select Business plan"
-                                checked={isBusiness}
-                                onChange={(e) => setIsBusiness(e.target.checked)}
-                            />
-                            <span className="price-plan-toggle__track" />
-                            <span className="price-plan-toggle__thumb" />
-                        </label>
-                        <span
-                            className="price-plan-toggle-label"
-                            data-plan="business"
-                            onClick={() => setIsBusiness(true)}
-                            onKeyDown={(e) => e.key === "Enter" && setIsBusiness(true)}
-                            role="button"
-                            tabIndex={0}
-                        >
-                            Business
-                        </span>
-                    </div>
+            {titleSlot && (
+                <div className="row align-items-end mb-60 g-4">
+                    <div className="col-lg-12">{titleSlot}</div>
                 </div>
-            </div>
+            )}
 
             <div className="row justify-content-center g-4">
-                {PLANS.map((plan) => (
+                {PACKAGES.map((plan) => (
                     <div key={plan.key} className="col-lg-4">
                         <div
                             className={`home-2-pricing-card ${plan.popular ? "home-2-pricing-card--popular" : ""}`.trim()}
@@ -140,12 +45,9 @@ export default function Section12Pricing({ titleSlot, footerSlot }: Section12Pri
                             )}
                             <div className="home-2-pricing-card__body">
                                 <h4 className="home-2-pricing-card__title">{plan.title}</h4>
-                                <div className="home-2-pricing-card__price">
+                                <div className="home-2-pricing-card__price mb-3">
                                     <span className={`home-2-pricing-card__price-value ${plan.priceClass}`}>
-                                        {prices[plan.key]}
-                                    </span>
-                                    <span className="home-2-pricing-card__price-period">
-                                        /monthly
+                                        {plan.price}
                                     </span>
                                 </div>
                                 <p className="home-2-pricing-card__desc">{plan.desc}</p>
@@ -162,11 +64,18 @@ export default function Section12Pricing({ titleSlot, footerSlot }: Section12Pri
                             </div>
                             <ul className="home-2-pricing-card__features">
                                 {plan.features.map((feature, i) => (
-                                    <li key={i}>
-                                        <span className="home-2-pricing-card__feature-icon dark-mode-invert">
+                                    <li key={i} className="d-flex align-items-start gap-2 mb-2">
+                                        <span className="home-2-pricing-card__feature-icon dark-mode-invert flex-shrink-0 mt-1">
                                             {FEATURE_ICON_SVG}
                                         </span>
-                                        {feature}
+                                        <div>
+                                            <span className="d-block fw-600">{feature.name}</span>
+                                            {feature.desc && (
+                                                <small style={{ color: "rgba(255,255,255,0.45)", fontSize: "12px", display: "block" }}>
+                                                    {feature.desc}
+                                                </small>
+                                            )}
+                                        </div>
                                     </li>
                                 ))}
                             </ul>

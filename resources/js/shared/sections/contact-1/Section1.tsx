@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 import RevealText from "@/shared/effects/RevealText";
 
 // Contact 1 Section 1 - Reach out / Contact form
@@ -48,11 +48,11 @@ const ARROW_ICON_SM = (
 );
 
 const AVATARS = [
-    { src: "/assets/imgs/template/avatar/avatar-10.webp", alt: "360 Creative Agency team member", hiddenOnMobile: false },
-    { src: "/assets/imgs/template/avatar/avatar-11.webp", alt: "360 Creative Agency team member", hiddenOnMobile: false },
-    { src: "/assets/imgs/template/avatar/avatar-12.webp", alt: "360 Creative Agency team member", hiddenOnMobile: false },
-    { src: "/assets/imgs/template/avatar/avatar-13.webp", alt: "360 Creative Agency team member", hiddenOnMobile: false },
-    { src: "/assets/imgs/template/avatar/avatar-14.webp", alt: "360 Creative Agency team member", hiddenOnMobile: true },
+    { src: "/assets/imgs/template/avatar/avatar-10.webp", alt: "Creative Agency team member", hiddenOnMobile: false },
+    { src: "/assets/imgs/template/avatar/avatar-11.webp", alt: "Creative Agency team member", hiddenOnMobile: false },
+    { src: "/assets/imgs/template/avatar/avatar-12.webp", alt: "Creative Agency team member", hiddenOnMobile: false },
+    { src: "/assets/imgs/template/avatar/avatar-13.webp", alt: "Creative Agency team member", hiddenOnMobile: false },
+    { src: "/assets/imgs/template/avatar/avatar-14.webp", alt: "Creative Agency team member", hiddenOnMobile: true },
 ];
 
 const SOCIAL_ITEMS = [
@@ -95,6 +95,24 @@ const SOCIAL_ITEMS = [
 ];
 
 export default function Section1() {
+    const { flash } = usePage().props as any;
+    const { data, setData, post, processing, reset, errors } = useForm({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post("/contact", {
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+            },
+        });
+    };
+
     return (
         <section className="sec-1-contact overflow-hidden pt-120">
             <div className="container">
@@ -193,52 +211,71 @@ export default function Section1() {
                 <div className="row g-5 pt-120 align-items-end">
                     <div className="col-xxl-6 col-lg-7">
                         <h4>Drop us a line</h4>
-                        <form className="sec-4-about-form" action="#" method="post">
+
+                        {flash?.success && (
+                            <div className="alert alert-success border-0 rounded-4 p-3 mb-4 text-white" style={{ background: "#059669" }}>
+                                ✓ {flash.success}
+                            </div>
+                        )}
+
+                        <form className="sec-4-about-form" onSubmit={handleSubmit}>
                             <div className="sec-4-about-form__field">
                                 <input
                                     type="text"
                                     className="sec-4-about-form__input"
                                     name="name"
+                                    value={data.name}
+                                    onChange={(e) => setData("name", e.target.value)}
                                     placeholder="Your name *"
                                     required
                                     aria-label="Your name"
                                 />
+                                {errors.name && <small className="text-danger">{errors.name}</small>}
                             </div>
                             <div className="sec-4-about-form__field">
                                 <input
                                     type="email"
                                     className="sec-4-about-form__input"
                                     name="email"
+                                    value={data.email}
+                                    onChange={(e) => setData("email", e.target.value)}
                                     placeholder="Your email *"
                                     required
                                     aria-label="Your email"
                                 />
+                                {errors.email && <small className="text-danger">{errors.email}</small>}
                             </div>
                             <div className="sec-4-about-form__field">
                                 <input
                                     type="tel"
                                     className="sec-4-about-form__input"
                                     name="phone"
+                                    value={data.phone}
+                                    onChange={(e) => setData("phone", e.target.value)}
                                     placeholder="Your phone *"
                                     required
                                     aria-label="Your phone"
                                 />
+                                {errors.phone && <small className="text-danger">{errors.phone}</small>}
                             </div>
                             <div className="sec-4-about-form__field">
                                 <textarea
                                     className="sec-4-about-form__input sec-4-about-form__textarea"
                                     name="message"
+                                    value={data.message}
+                                    onChange={(e) => setData("message", e.target.value)}
                                     placeholder="Your message *"
                                     rows={5}
                                     required
                                     aria-label="Your message"
                                 />
+                                {errors.message && <small className="text-danger">{errors.message}</small>}
                             </div>
                             <div className="sec-4-about-form__actions">
-                                <button type="submit" className="sec-4-about-form__btn at-btn">
+                                <button type="submit" className="sec-4-about-form__btn at-btn" disabled={processing}>
                                     <span>
-                                        <span className="text-1 text-capitalize">Send Message</span>
-                                        <span className="text-2 text-capitalize">Send Message</span>
+                                        <span className="text-1 text-capitalize">{processing ? "Sending..." : "Send Message"}</span>
+                                        <span className="text-2 text-capitalize">{processing ? "Sending..." : "Send Message"}</span>
                                     </span>
                                     <i>
                                         {ARROW_SVG}
@@ -248,11 +285,11 @@ export default function Section1() {
                             </div>
                             <p className="sec-4-about-form__disclaimer">
                                 By submitting, you agree to our{" "}
-                                <Link to="#" className="sec-4-about-form__link">
+                                <Link href="#" className="sec-4-about-form__link">
                                     Terms
                                 </Link>{" "}
                                 and{" "}
-                                <Link to="#" className="sec-4-about-form__link">
+                                <Link href="#" className="sec-4-about-form__link">
                                     Privacy Policy
                                 </Link>
                                 .

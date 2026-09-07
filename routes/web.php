@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -9,6 +10,7 @@ use App\Models\Service;
 use App\Models\PortfolioItem;
 use App\Models\Inquiry;
 use App\Models\Setting;
+use App\Models\TeamMember;
 
 // -------------------------------------------------------------
 // Public Agency Frontend Routes
@@ -34,7 +36,9 @@ Route::get('/portfolio', function () {
 });
 
 Route::get('/about', function () {
-    return Inertia::render('Frontend/About');
+    return Inertia::render('Frontend/About', [
+        'teamMembers' => TeamMember::orderBy('order', 'asc')->get(),
+    ]);
 });
 
 Route::get('/contact', function () {
@@ -52,7 +56,7 @@ Route::post('/contact', function (Request $request) {
 
     Inquiry::create($validated);
 
-    return redirect()->back()->with('success', 'Thank you! Your message has been received. Our engineering team will get in touch shortly.');
+    return redirect()->back()->with('success', 'Thank you! Your message has been received. Our team will get in touch with you shortly.');
 });
 
 // -------------------------------------------------------------
@@ -103,10 +107,44 @@ Route::middleware('auth')->group(function () {
             'totalInquiries' => Inquiry::count(),
             'activeProjects' => PortfolioItem::count(),
             'servicesCount' => Service::count(),
+            'teamMembersCount' => TeamMember::count(),
             'recentInquiries' => Inquiry::latest()->get(),
             'servicesList' => Service::latest()->get(),
             'portfolioList' => PortfolioItem::latest()->get(),
+            'teamMembersList' => TeamMember::orderBy('order', 'asc')->get(),
         ]);
+    });
+
+    // Admin Profile & Password Update Routes
+    Route::post('/admin/profile', function (Request $request) {
+        $user = Auth::user();
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->back()->with('success', 'Admin profile info updated successfully!');
+    });
+
+    Route::post('/admin/profile/password', function (Request $request) {
+        $validated = $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($validated['current_password'], $user->password)) {
+            return back()->withErrors(['current_password' => 'The current password provided is incorrect.']);
+        }
+
+        $user->update([
+            'password' => Hash::make($validated['new_password']),
+        ]);
+
+        return redirect()->back()->with('success', 'Admin password changed successfully!');
     });
 
     // Settings CRUD
@@ -137,6 +175,47 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/inquiries/{id}', function ($id) {
         Inquiry::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Inquiry deleted successfully.');
+    });
+
+    // Team Members CRUD
+    Route::post('/admin/team-members', function (Request $request) {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'designation' => 'required|string|max:255',
+            'photo_url' => 'nullable|string',
+            'description' => 'nullable|string',
+            'order' => 'nullable|integer',
+        ]);
+
+        TeamMember::create([
+            'name' => $validated['name'],
+            'designation' => $validated['designation'],
+            'photo_url' => $validated['photo_url'] ?? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80&fit=crop',
+            'description' => $validated['description'] ?? '',
+            'order' => $validated['order'] ?? 0,
+        ]);
+
+        return redirect()->back()->with('success', 'Team member added successfully!');
+    });
+
+    Route::put('/admin/team-members/{id}', function (Request $request, $id) {
+        $member = TeamMember::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'designation' => 'required|string|max:255',
+            'photo_url' => 'nullable|string',
+            'description' => 'nullable|string',
+            'order' => 'nullable|integer',
+        ]);
+
+        $member->update($validated);
+
+        return redirect()->back()->with('success', 'Team member updated successfully!');
+    });
+
+    Route::delete('/admin/team-members/{id}', function ($id) {
+        TeamMember::findOrFail($id)->delete();
+        return redirect()->back()->with('success', 'Team member deleted successfully.');
     });
 
     // Services CRUD
